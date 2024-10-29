@@ -12,14 +12,9 @@
 <body>
 
 <div id="app">
-  <input type="text" />
+  <input type="text" v-model="marker" />
   <ul>
-    <li>Email</li>
-    <li class="marked">Email</li>
-    <li class="marked">Email</li>
-    <li>Email</li>
-    <li>Email</li>
-    <li>...</li>
+    <li v-for="{ email, marked } in markedEmails" :class="{ marked }">{{ email }}</li>
   </ul>
 </div>
 
