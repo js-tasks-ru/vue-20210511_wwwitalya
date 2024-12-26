@@ -44,4 +44,54 @@ const agendaItemIcons = {
   other: 'cal-sm',
 };
 
-// Требуется создать Vue приложение
+export const app = new Vue({
+  data() {
+    return {
+      rawMeetup: null,
+    };
+  },
+
+  computed: {
+    meetup() {
+      // Требуется помнить о том, что изначально митапа может не быть.
+      // В этом случае и вычисляемый митап - это null.
+      if (this.rawMeetup === null) {
+        return null;
+      }
+
+      return {
+        ...this.rawMeetup,
+
+        cover: this.rawMeetup.imageId ? getImageUrlByImageId(this.rawMeetup.imageId) : undefined,
+
+        date: new Date(this.rawMeetup.date),
+
+        localeDate: new Date(this.rawMeetup.date).toLocaleString(navigator.language, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+
+        dateOnlyString: new Date(this.rawMeetup.date).toISOString().substr(0, 10),
+
+        agenda: this.rawMeetup.agenda.map((agendaItem) => ({
+          ...agendaItem,
+          icon: `icon-${agendaItemIcons[agendaItem.type]}.svg`,
+          title: agendaItem.title || agendaItemDefaultTitles[agendaItem.type],
+        })),
+      };
+    },
+  },
+
+  mounted() {
+    this.fetchMeetup();
+  },
+
+  methods: {
+    fetchMeetup() {
+      return fetch(`${API_URL}/meetups/${MEETUP_ID}`)
+        .then((res) => res.json())
+        .then((meetup) => (this.rawMeetup = meetup));
+    },
+  },
+}).$mount('#app');
