@@ -1,22 +1,12 @@
 <template>
-  <list-view :items="cats">
-    <!--
-    "X" - некоторый элемент списка, полученный из параметров слота.
-    Имя параметра выберите сами и замените X на него в коде ниже.
-
-    <list-view-card
-      :key="X.id"
-      tag="article"
-      :title="X.title"
-      :cover="X.cover"
-    >
+  <list-view v-slot="{ item }" :items="cats">
+    <list-view-card :key="item.id" tag="article" :title="item.title" :cover="item.cover">
       <ul class="info-list">
-        <li>{{ X.description }}</li>
+        <li>{{ item.description }}</li>
         <li>Cute cat</li>
         <li>Cats are always cute</li>
       </ul>
     </list-view-card>
-    -->
   </list-view>
 </template>
 
